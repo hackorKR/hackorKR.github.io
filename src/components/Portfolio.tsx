@@ -212,7 +212,7 @@ const Portfolio = () => {
               <RowSubTitle>
                 Tech Stack<HighlightSpan>.</HighlightSpan>
               </RowSubTitle>
-              <RowP>앱</RowP>
+              <RowP>Typescript, React, Redux, Redux-saga</RowP>
               <RowP>앱</RowP>
               <RowP>앱</RowP>
             </Project>

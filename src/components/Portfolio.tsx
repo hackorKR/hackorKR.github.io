@@ -5,7 +5,13 @@ import useWindowScroll from "../hooks/useWindowScroll";
 import useScrollFadeIn from "../hooks/useScrollFadeIn";
 
 const Container = styled.div`
-  width: 100%;
+  margin: 0 auto;
+  max-width: 50rem;
+
+  @media screen and (max-width: 60rem) {
+    max-width: 40rem;
+    padding: 0 2rem;
+  }
 `;
 
 const FixBar = styled.nav`
@@ -15,10 +21,16 @@ const FixBar = styled.nav`
   width: 100%;
   background-color: ${colors.primary};
   transition: height 0.3s ease-in-out;
-  height: 1rem;
+  height: 10px;
 
   &.scrolled {
     height: 3.5rem;
+  }
+
+  @media screen and (max-width: 960px) {
+    &.scrolled {
+      height: 2.8rem;
+    }
   }
 `;
 
@@ -34,10 +46,10 @@ const FixBarTitle = styled.h3`
     animation-duration: 0.3s;
   }
 
-  &.uneffect {
-    animation-name: titleAnimation;
-    animation-timing-function: ease-in-out;
-    animation-duration: 0.3s;
+  @media screen and (max-width: 60rem) {
+    max-width: 40rem;
+    padding: 0 2rem;
+    font-size: 2rem;
   }
 
   @keyframes titleAnimation {
@@ -63,27 +75,49 @@ const Header = styled.header`
 const HeaderTitle = styled.h1`
   font-size: 4em;
   line-height: 1.1;
+  margin: 2rem 0;
+
+  @media screen and (max-width: 960px) {
+    font-size: 2.5rem;
+  }
 `;
 
 const HighlightSpan = styled.span`
   color: ${colors.primary};
-  text-shadow: -1px 0 ${colors.lightGrey}, 0 1px ${colors.lightGrey},
-    1px 0 ${colors.lightGrey}, 0 -1px ${colors.lightGrey};
+  font-size: 1.2em;
 `;
 
 const HeaderDescription = styled.p`
   font-size: 1.8rem;
   font-weight: 500;
+
+  @media screen and (max-width: 60rem) {
+    font-size: 1.15rem;
+    margin: 0 0 1rem 0;
+  }
 `;
 
 const Section = styled.section``;
 
 const SectionTitle = styled.h2`
   font-size: 2.5rem;
+
+  @media screen and (max-width: 60rem) {
+    font-size: 2rem;
+  }
 `;
 
 const Row = styled.div`
   display: flex;
+  border-bottom: 1px solid #eee;
+
+  &.column {
+    flex-direction: column;
+  }
+
+  @media screen and (max-width: 60rem) {
+    flex-direction: column;
+  }
 `;
 
 const Project = styled.div`
@@ -92,33 +126,84 @@ const Project = styled.div`
 
 const RowLeft = styled.div`
   flex-basis: 18rem;
-  margin-right: 1rem;
   flex-shrink: 0;
+  margin-right: 1rem;
+
+  @media screen and (max-width: 60rem) {
+    flex-basis: auto;
+    margin: 1rem 0 0 0;
+  }
 `;
 
 const RowTitle = styled.h3`
-  font-size: 1.8rem;
+  font-size: 2rem;
   margin: 0 0 1rem 0;
+
+  @media screen and (max-width: 60rem) {
+    font-size: 1.8rem;
+  }
 `;
 
 const RowSubTitle = styled.h4`
+  font-size: 1.8rem;
+  margin: 0.5rem 0;
+
+  @media screen and (max-width: 60rem) {
+    font-size: 1.5rem;
+    margin: 0.75rem 0;
+  }
+`;
+
+const RowDescriptionTitle = styled.h5`
   font-size: 1.5rem;
-  margin: 0 0 1rem 0;
+  margin: 0.5rem 0;
+
+  @media screen and (max-width: 60rem) {
+    font-size: 1.3rem;
+  }
+`;
+
+const RowAnchor = styled.a`
+  display: block;
+  color: black;
 `;
 
 const RowSpan = styled.span`
   display: block;
+
+  &.time {
+    margin-bottom: 1rem;
+  }
+
+  @media screen and (max-width: 60rem) {
+    &.time {
+      margin-bottom: 1.5rem;
+    }
+  }
 `;
 
-const RowP = styled.p``;
+const RowP = styled.p`
+  margin: 0;
+`;
 
 const RowRight = styled.div`
   flex-grow: 1;
 `;
 
+const RowUl = styled.ul`
+  padding: 0.2rem 0 0.2rem 1.5rem;
+  margin: 0;
+`;
+
+const Other = styled.div`
+  padding: 2rem 0;
+  border-bottom: 1px solid #eee;
+`;
+
 const Portfolio = () => {
   const experienceRef = useRef<HTMLHeadingElement>(null);
-  const sideProjectRef = useRef<HTMLHeadingElement>(null);
+  const otherExperiencesRef = useRef<HTMLHeadingElement>(null);
+  const skillsRef = useRef<HTMLHeadingElement>(null);
   const fixBarTitleRef = useRef<HTMLHeadingElement>(null);
 
   const animatedItem = useScrollFadeIn();
@@ -134,23 +219,38 @@ const Portfolio = () => {
   useEffect(() => {
     const title = fixBarTitleRef.current;
     const experience = experienceRef.current;
-    const sideProject = sideProjectRef.current;
+    const otherExperiences = otherExperiencesRef.current;
+    const skills = skillsRef.current;
 
-    if (!title || !experience || !sideProject) {
+    if (!title || !experience || !otherExperiences || !skills) {
       return;
     }
-    if (scrollY > experience.offsetTop && scrollY < sideProject.offsetTop) {
-      title.classList.add("effect");
+    if (
+      scrollY >= experience.offsetTop &&
+      scrollY < otherExperiences.offsetTop
+    ) {
+      if (!title.classList.contains("effect")) {
+        title.classList.add("effect");
+      }
       setFixBarTitle(experience.innerText);
       setIsScrolled(true);
-    } else if (scrollY > sideProject.offsetTop) {
-      title.classList.remove("effect");
-      title.classList.add("uneffect");
-      setFixBarTitle(sideProject.innerText);
+    } else if (
+      scrollY >= otherExperiences.offsetTop &&
+      scrollY < skills.offsetTop
+    ) {
+      if (!title.classList.contains("effect")) {
+        title.classList.add("effect");
+      }
+      setFixBarTitle(otherExperiences.innerText);
+      setIsScrolled(true);
+    } else if (scrollY >= skills.offsetTop) {
+      if (!title.classList.contains("effect")) {
+        title.classList.add("effect");
+      }
+      setFixBarTitle(skills.innerText);
       setIsScrolled(true);
     } else {
       title.classList.remove("effect");
-      title.classList.remove("uneffect");
       setFixBarTitle("");
       setIsScrolled(false);
     }
@@ -168,13 +268,10 @@ const Portfolio = () => {
           저는 조대현(Danny)입니다<HighlightSpan>.</HighlightSpan>
         </HeaderTitle>
         <HeaderDescription>
-          1년차 웹 프론트엔드 개발자이며 사용자 경험을 향상시켜
-          <br />
-          비즈니스 성장에 기여하는 것을 좋아합니다. 개발자란 문제를
-          <br />
-          해결하는 직업이라고 생각합니다. 해결하고자 하는 문제의
-          <br />
-          본질을 파악해 최선의 결과를 내기 위한 노력을 합니다.
+          1년차 웹 프론트엔드 개발자이며 사용자 경험을 향상시켜 비즈니스 성장에
+          기여하는 것을 좋아합니다. 개발자란 문제를 해결하는 직업이라고
+          생각합니다. 해결하고자 하는 문제의 원인을 파악해 근원적인 문제를
+          해결하려고 노력합니다.
         </HeaderDescription>
       </Header>
       <Section>
@@ -187,183 +284,332 @@ const Portfolio = () => {
               탱커펀드<HighlightSpan>.</HighlightSpan>
             </RowTitle>
             <RowSpan>Frontend Developer</RowSpan>
-            <RowSpan>2020.12 ~ 현재</RowSpan>
+            <RowSpan className="tiem">2020.12 ~ 현재</RowSpan>
           </RowLeft>
           <RowRight>
             <Project>
-              <RowTitle>
+              <RowSubTitle>
                 닥집(Doczip) 프론트 개발<HighlightSpan>.</HighlightSpan>
-              </RowTitle>
-              <RowSpan>https://doczip.kr/</RowSpan>
-              <RowSpan>2021.4 ~ 현재</RowSpan>
-              <RowSubTitle>
+              </RowSubTitle>
+              <a href="https://doczip.kr/" target="_blank">
+                홈페이지 바로가기
+              </a>
+              <RowSpan className="time">2021.4 ~ 현재</RowSpan>
+              <RowDescriptionTitle>
                 Description<HighlightSpan>.</HighlightSpan>
-              </RowSubTitle>
+              </RowDescriptionTitle>
               <RowP>
-                닥집(Doczip) 프로젝트 시작부터 참여하여 환경셋팅과 기술스택
-                선정에 기여하였으며 지속적인 개발 및 유지보수를 하고 있습니다.
+                닥집(Doczip)이라는 PropTech(부동산 테크) 관련 프로젝트의
+                시작부터 참여하여 환경셋팅과 기술스택 선정에 기여하였으며
+                지속적인 개발 및 유지보수를 하고 있습니다.
               </RowP>
-              <RowSubTitle>
+              <RowDescriptionTitle>
                 What did I do<HighlightSpan>.</HighlightSpan>
-              </RowSubTitle>
-              <RowP>앱</RowP>
-              <RowP>앱</RowP>
-              <RowP>앱</RowP>
-              <RowSubTitle>
+              </RowDescriptionTitle>
+              <RowUl>
+                <li>전반적인 UI 컴포넌트 구현 및 개선</li>
+                <li>
+                  주소 입력 시 표준계약서, 중개대상물 확인설명서 자동완성 기능
+                  구현
+                </li>
+                <li>로그인, 페이지네이션 등 사이트의 기본적인 틀 구현</li>
+                <li>결제 모듈 부착</li>
+              </RowUl>
+              <RowDescriptionTitle>
                 Tech Stack<HighlightSpan>.</HighlightSpan>
-              </RowSubTitle>
-              <RowP>Typescript, React, Redux, Redux-saga</RowP>
-              <RowP>앱</RowP>
-              <RowP>앱</RowP>
+              </RowDescriptionTitle>
+              <RowP>
+                Typescript, React Hook, Styled-components, Redux, Redux-saga,
+                Docker
+              </RowP>
             </Project>
             <Project>
-              <RowTitle>
-                미라클펀딩 외주 개발<HighlightSpan>.</HighlightSpan>
-              </RowTitle>
-              <RowSpan>https://doczip.kr/</RowSpan>
-              <RowSpan>2021.4 ~ 현재</RowSpan>
               <RowSubTitle>
+                미라클펀딩 관리자 페이지 외주 개발
+                <HighlightSpan>.</HighlightSpan>
+              </RowSubTitle>
+              <a href="https://miraclefunding.co.kr/" target="_blank">
+                홈페이지 바로가기
+              </a>
+              <RowSpan className="time">2021.7 ~ 2021.11</RowSpan>
+              <RowDescriptionTitle>
                 Description<HighlightSpan>.</HighlightSpan>
-              </RowSubTitle>
+              </RowDescriptionTitle>
               <RowP>
-                닥집(Doczip) 프로젝트 시작부터 참여하여 환경셋팅과 기술스택
-                선정에 기여하였으며 지속적인 개발 및 유지보수를 하고 있습니다.
+                P2P 서비스에서 관리자 페이지에 기능을 추가하고 개선하는 작업을
+                하였습니다.
               </RowP>
-              <RowSubTitle>
+              <RowDescriptionTitle>
                 What did I do<HighlightSpan>.</HighlightSpan>
-              </RowSubTitle>
-              <RowP>앱</RowP>
-              <RowP>앱</RowP>
-              <RowP>앱</RowP>
-              <RowSubTitle>
+              </RowDescriptionTitle>
+              <RowUl>
+                <li>투자금 대시보드 구현</li>
+                <li>유저 목록 및 관리 기능 구현</li>
+                <li>관리자 거래내역 구현</li>
+                <li>관리자 활동 기록 구현</li>
+              </RowUl>
+              <RowDescriptionTitle>
                 Tech Stack<HighlightSpan>.</HighlightSpan>
-              </RowSubTitle>
-              <RowP>앱</RowP>
-              <RowP>앱</RowP>
-              <RowP>앱</RowP>
+              </RowDescriptionTitle>
+              <RowP>Javascript, React, Less, Docker</RowP>
             </Project>
             <Project>
-              <RowTitle>
+              <RowSubTitle>
                 부동산 규제지역 API 개발<HighlightSpan>.</HighlightSpan>
-              </RowTitle>
-              <RowSpan>https://doczip.kr/</RowSpan>
-              <RowSpan>2021.4 ~ 현재</RowSpan>
+              </RowSubTitle>
+              <RowSpan className="time">2020.12 ~ 2021.4</RowSpan>
               <RowSubTitle>
                 Description<HighlightSpan>.</HighlightSpan>
               </RowSubTitle>
               <RowP>
-                닥집(Doczip) 프로젝트 시작부터 참여하여 환경셋팅과 기술스택
-                선정에 기여하였으며 지속적인 개발 및 유지보수를 하고 있습니다.
+                사내 서비스에서 내부적으로 사용하기 위해 부동산 규제지역 API를
+                제작하였습니다. 또한 관리자 페이지를 만들어서 규제지역 설정을
+                쉽게 할 수 있게 만들었습니다.
               </RowP>
               <RowSubTitle>
                 What did I do<HighlightSpan>.</HighlightSpan>
               </RowSubTitle>
-              <RowP>앱</RowP>
-              <RowP>앱</RowP>
-              <RowP>앱</RowP>
+              <RowP>
+                법정동 지역의 규제지역 여부(투기지역, 투기과열지구,
+                조정대상지역)를 제공하는 REST API를 구현
+              </RowP>
+              <RowP>관리자 페이지 구현</RowP>
               <RowSubTitle>
                 Tech Stack<HighlightSpan>.</HighlightSpan>
               </RowSubTitle>
-              <RowP>앱</RowP>
-              <RowP>앱</RowP>
-              <RowP>앱</RowP>
+              <RowP>
+                Python, Flask, Poetry, Alembic, Docker, Typescript, React,
+                Styled-components
+              </RowP>
             </Project>
           </RowRight>
         </Row>
       </Section>
       <Section>
-        <SectionTitle ref={sideProjectRef}>
-          Side Project<HighlightSpan>.</HighlightSpan>
+        <SectionTitle ref={otherExperiencesRef}>
+          Other Experiences<HighlightSpan>.</HighlightSpan>
         </SectionTitle>
-        <Row>
-          <RowLeft>
-            <RowTitle>
-              탱커펀드<HighlightSpan>.</HighlightSpan>
-            </RowTitle>
-            <RowSpan>Frontend Developer</RowSpan>
-            <RowSpan>2020.12 ~ 현재</RowSpan>
-          </RowLeft>
-          <RowRight>
-            <Project>
-              <RowTitle>
-                닥집(Doczip) 프론트 개발<HighlightSpan>.</HighlightSpan>
-              </RowTitle>
-              <RowSpan>https://doczip.kr/</RowSpan>
-              <RowSpan>2021.4 ~ 현재</RowSpan>
-              <RowSubTitle>
-                Description<HighlightSpan>.</HighlightSpan>
-              </RowSubTitle>
-              <RowP>
-                닥집(Doczip) 프로젝트 시작부터 참여하여 환경셋팅과 기술스택
-                선정에 기여하였으며 지속적인 개발 및 유지보수를 하고 있습니다.
-              </RowP>
-              <RowSubTitle>
-                What did I do<HighlightSpan>.</HighlightSpan>
-              </RowSubTitle>
-              <RowP>앱</RowP>
-              <RowP>앱</RowP>
-              <RowP>앱</RowP>
-              <RowSubTitle>
-                Tech Stack<HighlightSpan>.</HighlightSpan>
-              </RowSubTitle>
-              <RowP>앱</RowP>
-              <RowP>앱</RowP>
-              <RowP>앱</RowP>
-            </Project>
-            <Project>
-              <RowTitle>
-                미라클펀딩 외주 개발<HighlightSpan>.</HighlightSpan>
-              </RowTitle>
-              <RowSpan>https://doczip.kr/</RowSpan>
-              <RowSpan>2021.4 ~ 현재</RowSpan>
-              <RowSubTitle>
-                Description<HighlightSpan>.</HighlightSpan>
-              </RowSubTitle>
-              <RowP>
-                닥집(Doczip) 프로젝트 시작부터 참여하여 환경셋팅과 기술스택
-                선정에 기여하였으며 지속적인 개발 및 유지보수를 하고 있습니다.
-              </RowP>
-              <RowSubTitle>
-                What did I do<HighlightSpan>.</HighlightSpan>
-              </RowSubTitle>
-              <RowP>앱</RowP>
-              <RowP>앱</RowP>
-              <RowP>앱</RowP>
-              <RowSubTitle>
-                Tech Stack<HighlightSpan>.</HighlightSpan>
-              </RowSubTitle>
-              <RowP>앱</RowP>
-              <RowP>앱</RowP>
-              <RowP>앱</RowP>
-            </Project>
-            <Project>
-              <RowTitle>
-                부동산 규제지역 API 개발<HighlightSpan>.</HighlightSpan>
-              </RowTitle>
-              <RowSpan>https://doczip.kr/</RowSpan>
-              <RowSpan>2021.4 ~ 현재</RowSpan>
-              <RowSubTitle>
-                Description<HighlightSpan>.</HighlightSpan>
-              </RowSubTitle>
-              <RowP>
-                닥집(Doczip) 프로젝트 시작부터 참여하여 환경셋팅과 기술스택
-                선정에 기여하였으며 지속적인 개발 및 유지보수를 하고 있습니다.
-              </RowP>
-              <RowSubTitle>
-                What did I do<HighlightSpan>.</HighlightSpan>
-              </RowSubTitle>
-              <RowP>앱</RowP>
-              <RowP>앱</RowP>
-              <RowP>앱</RowP>
-              <RowSubTitle>
-                Tech Stack<HighlightSpan>.</HighlightSpan>
-              </RowSubTitle>
-              <RowP>앱</RowP>
-              <RowP>앱</RowP>
-              <RowP>앱</RowP>
-            </Project>
-          </RowRight>
-        </Row>
+        <Other>
+          <RowTitle>
+            비즈니스 카드 관리 앱<HighlightSpan>.</HighlightSpan>
+          </RowTitle>
+          <RowSpan>
+            <a
+              href="https://github.com/hackorKR/React-card-maker"
+              target="_blank"
+            >
+              레포 바로가기
+            </a>
+          </RowSpan>
+          <RowSpan className="time">2020. 11. - 2020. 11.</RowSpan>
+          <RowUl>
+            <li>구글, 깃헙 로그인 기능 구현</li>
+            <li>실시간 반응형 웹, 백엔드(firebase) 연결</li>
+            <li>이미지 Cloudinary로 업로드 구현</li>
+          </RowUl>
+        </Other>
+        <Other>
+          <RowTitle>
+            유튜브 클론코딩<HighlightSpan>.</HighlightSpan>
+          </RowTitle>
+          <RowSpan>
+            <a
+              href="https://hackorkr.github.io/React-youtube-refactoring/"
+              target="_blank"
+            >
+              홈페이지 바로가기
+            </a>
+          </RowSpan>
+          <RowSpan className="time">2020. 10. - 2020. 11.</RowSpan>
+          <RowUl>
+            <li>Youtube API를 활용해서 인기 차트 카테고리화</li>
+            <li>반응형 웹으로 구현</li>
+            <li>SPA로 제작</li>
+          </RowUl>
+        </Other>
+        <Other>
+          <RowTitle>
+            카카오 아레나 대회<HighlightSpan>.</HighlightSpan>
+          </RowTitle>
+          <RowSpan>
+            <a
+              href="https://github.com/HaeJung1016/arena_melon"
+              target="_blank"
+            >
+              레포 바로가기
+            </a>
+          </RowSpan>
+          <RowSpan className="time">2020. 05. - 2020. 07.</RowSpan>
+          <RowUl>
+            <li>Word2Vec알고리즘을 활용해 곡과 태그를 예측하는 코드 작성</li>
+            <li>
+              FastText알고리즘을 활용해 한국어 자연어처리를 하 여 곡과 태그를
+              예측하는 코드 작성
+            </li>
+            <li>Pandas로 데이터 분석과 구조화</li>
+          </RowUl>
+        </Other>
+        <Other>
+          <RowTitle>
+            고려대학교 세종캠퍼스<HighlightSpan>.</HighlightSpan>
+          </RowTitle>
+          <RowSpan>전자 및 정보공학과</RowSpan>
+          <RowSpan className="time">2017. 03. - 휴학중</RowSpan>
+          <RowUl>
+            <li>1학년 때 C언어 기초프로그래밍 수업을 들었습니다.</li>
+            <li>2학년 때 Java객체지향 프로그래밍 수업을 들었습니다.</li>
+          </RowUl>
+        </Other>
+      </Section>
+      <Section>
+        <SectionTitle ref={skillsRef}>
+          Skills<HighlightSpan>.</HighlightSpan>
+        </SectionTitle>
+        <Other>
+          <RowTitle>
+            Overall<HighlightSpan>.</HighlightSpan>
+          </RowTitle>
+          <RowUl>
+            <li>
+              사용자가 알아보기 쉬운, 설명서가 필요없는 디자인을 하려
+              노력합니다.
+            </li>
+            <li>
+              기술적으로만 문제를 해결하려 하지 않고 유연한 사고를 가지며
+              비즈니스 가치에 기여할 수 있는 방향으로 사고합니다.
+            </li>
+            <li>
+              팀의 프로세스 및 개발 문화를 더 좋은 방향으로 개선하려고
+              노력합니다.
+            </li>
+            <li>
+              어색하지 않은 토의 분위기를 추구하기에 함께 토의할 사람들과 친밀한
+              관계를 유지하려 노력합니다.
+            </li>
+          </RowUl>
+        </Other>
+        <Other>
+          <RowTitle>
+            Communication<HighlightSpan>.</HighlightSpan>
+          </RowTitle>
+          <RowUl>
+            <li>
+              항상 문제의 원인을 파악하고 왜 이런 문제가 생겼는지 이해하려고
+              노력합니다.
+            </li>
+            <li>
+              기술적인 해결법도 좋아하지만, 비즈니스에 도움이 되는 해결법을
+              찾으려고 노력합니다.
+            </li>
+            <li>
+              비즈니스 방향성을 따른 뒤, 사용자 경험을 최우선으로 생각하여
+              사용자의 피드백을 확인할 수 있는 채널을 확보하고 문제가 생기면
+              바로 해결하려 노력합니다.
+            </li>
+            <li>
+              자신이 맡은 일을 끝마치려 최선을 다하며, 막힌 부분은 충분히 고민한
+              뒤 개발 기한 전까지 해결하지 못할 것 같은 경우 팀원들에게 도움을
+              요청합니다.
+            </li>
+            <li>
+              팀원들과 친밀감을 갖는 것이 의사소통에 큰 도움이 된다 생각하기에
+              항상 팀원들에게 친절하고 친하게 지냅니다.
+            </li>
+          </RowUl>
+        </Other>
+        <Other>
+          <RowTitle>
+            HTML / CSS<HighlightSpan>.</HighlightSpan>
+          </RowTitle>
+          <RowUl>
+            <li>시맨틱 마크업을 준수합니다.</li>
+            <li>다양한 플랫폼 및 브라우저를 지원할 수 있습니다.</li>
+            <li>Styled-components와 PostCSS를 사용할 수 있습니다.</li>
+          </RowUl>
+        </Other>
+        <Other>
+          <RowTitle>
+            JavaScript<HighlightSpan>.</HighlightSpan>
+          </RowTitle>
+          <RowUl>
+            <li>ES6 Javascript 이후의 자바스크립트 문법에 익숙합니다.</li>
+            <li>타입스크립트를 사용할 수 있습니다.</li>
+            <li>
+              함수형 프로그래밍을 선호하며 대부분의 코드를 함수형 프로그래밍으로
+              작성합니다.
+            </li>
+          </RowUl>
+        </Other>
+        <Other>
+          <RowTitle>
+            React<HighlightSpan>.</HighlightSpan>
+          </RowTitle>
+          <RowUl>
+            <li>
+              React hooks를 능숙하게 사용하고, 거의 모든 컴포넌트를 함수로
+              만듭니다. hook을 이용해 공통 비즈니스 로직을 적절히 모듈화해
+              사용할 수 있습니다.
+            </li>
+            <li>PureComponent와 React.memo를 상황에 잘 맞게 사용합니다.</li>
+            <li>
+              컴포넌트 라이프 사이클을 알고 있으며 관련 메소드를 상황에 따라
+              적절히 사용합니다.
+            </li>
+            <li>Redux, Redux-saga를 이용해 상태 관리를 할 수 있습니다.</li>
+          </RowUl>
+        </Other>
+        <Other>
+          <RowTitle>
+            Tooling<HighlightSpan>.</HighlightSpan>
+          </RowTitle>
+          <RowUl>
+            <li>
+              Git를 사용할 줄 알며 Gitgub Actions를 활용하여 기능 단위 테스트 및
+              lint 체크를 할 수 있습니다.
+            </li>
+            <li>
+              Jira를 활용하여 체계적인 이슈 관리 및 개발 진척도 등을 상시
+              확인하고 보고할 수 있습니다.
+            </li>
+            <li>
+              프로젝트의 요구사항에 알맞는 프론트엔드 환경을 세팅할 수 있습니다.
+            </li>
+          </RowUl>
+        </Other>
+        <Other>
+          <RowTitle>
+            DevOps<HighlightSpan>.</HighlightSpan>
+          </RowTitle>
+          <RowUl>
+            <li>
+              Docker 이미지를 이용해 개발환경 공유 및 서버 배포를 할 수
+              있습니다.
+            </li>
+            <li>AWS EC2 사용 경험이 있어 개발과 동시에 운영도 가능합니다.</li>
+          </RowUl>
+        </Other>
+      </Section>
+      <Section>
+        <Other>
+          <RowTitle>
+            Contact<HighlightSpan>.</HighlightSpan>
+          </RowTitle>
+          <RowUl>
+            <li>
+              <a href="mailto:hackorkr@gmail.com">이메일</a>
+            </li>
+            <li>
+              <a href="https://github.com/hackorKR/" target="_blank">
+                깃허브
+              </a>
+            </li>
+            <li>
+              <a href="https://github.com/hackorKR/" target="_blank">
+                원티드
+              </a>
+            </li>
+          </RowUl>
+        </Other>
       </Section>
     </Container>
   );

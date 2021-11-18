@@ -321,7 +321,7 @@ const Portfolio = () => {
             </Project>
             <Project>
               <RowSubTitle>
-                미라클펀딩 관리자 페이지 외주 개발
+                미라클펀딩 관리자 페이지 개발
                 <HighlightSpan>.</HighlightSpan>
               </RowSubTitle>
               <a href="https://miraclefunding.co.kr/" target="_blank">

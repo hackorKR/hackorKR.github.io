@@ -1,8 +1,7 @@
-import React, { useEffect, useMemo, useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import styled from "styled-components";
 import { colors } from "../shared/styles";
 import useWindowScroll from "../hooks/useWindowScroll";
-import useScrollFadeIn from "../hooks/useScrollFadeIn";
 
 const Container = styled.div`
   margin: 0 auto;
@@ -29,7 +28,7 @@ const FixBar = styled.nav`
 
   @media screen and (max-width: 960px) {
     &.scrolled {
-      height: 2.8rem;
+      height: 2.5rem;
     }
   }
 `;
@@ -206,15 +205,9 @@ const Portfolio = () => {
   const skillsRef = useRef<HTMLHeadingElement>(null);
   const fixBarTitleRef = useRef<HTMLHeadingElement>(null);
 
-  const animatedItem = useScrollFadeIn();
-
   const { scrollY } = useWindowScroll();
   const [isScrolled, setIsScrolled] = useState(false);
   const [fixBarTitle, setFixBarTitle] = useState("");
-
-  useEffect(() => {
-    document.title = "조대현 | Frontend Developer";
-  }, []);
 
   useEffect(() => {
     const title = fixBarTitleRef.current;
@@ -269,9 +262,9 @@ const Portfolio = () => {
         </HeaderTitle>
         <HeaderDescription>
           1년차 웹 프론트엔드 개발자이며 사용자 경험을 향상시켜 비즈니스 성장에
-          기여하는 것을 좋아합니다. 개발자란 문제를 해결하는 직업이라고
-          생각합니다. 해결하고자 하는 문제의 원인을 파악해 근원적인 문제를
-          해결하려고 노력합니다.
+          기여하는 것을 좋아합니다. 단순히 문제의 결과만 해결하는 것이 아닌
+          근원을 찾아 해결하기 위해 노력합니다. 솔직하고 간결하게 자신의 의견을
+          말할 수 있는 환경을 선호합니다.
         </HeaderDescription>
       </Header>
       <Section>
@@ -312,7 +305,10 @@ const Portfolio = () => {
                   주소 입력 시 표준계약서, 중개대상물 확인설명서 자동완성 기능
                   구현
                 </li>
-                <li>로그인, 페이지네이션 등 사이트의 기본적인 틀 구현</li>
+                <li>
+                  로그인, CRUD, 리스트 페이지네이션 등 사이트의 기본적인 기능
+                  구현
+                </li>
                 <li>결제 모듈 부착</li>
               </RowUl>
               <RowDescriptionTitle>
@@ -331,7 +327,7 @@ const Portfolio = () => {
               <a href="https://miraclefunding.co.kr/" target="_blank">
                 홈페이지 바로가기
               </a>
-              <RowSpan className="time">2021.7 ~ 2021.11</RowSpan>
+              <RowSpan className="time">2021.7 ~ 2021.10</RowSpan>
               <RowDescriptionTitle>
                 Description<HighlightSpan>.</HighlightSpan>
               </RowDescriptionTitle>
@@ -369,10 +365,15 @@ const Portfolio = () => {
               <RowSubTitle>
                 What did I do<HighlightSpan>.</HighlightSpan>
               </RowSubTitle>
-              <RowP>
-                법정동 지역의 규제지역 여부(투기지역, 투기과열지구,
-                조정대상지역)를 제공하는 REST API를 구현
-              </RowP>
+              <RowUl>
+                <li>
+                  법정동 지역의 규제지역 여부(투기지역, 투기과열지구,
+                  조정대상지역)를 제공하는 REST API를 구현
+                </li>
+                <li>
+                  관리자가 규제지역을 쉽게 업데이트할 수 있도록 프론트 UI를 구현
+                </li>
+              </RowUl>
               <RowP>관리자 페이지 구현</RowP>
               <RowSubTitle>
                 Tech Stack<HighlightSpan>.</HighlightSpan>
